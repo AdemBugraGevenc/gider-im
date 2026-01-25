@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import {
     LayoutDashboard,
     Target,
@@ -20,8 +21,8 @@ import { ParaEkleModal } from './components/ParaEkleModal';
 import { OnayModal } from './components/OnayModal';
 
 export default function App() {
-    const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_DATA);
-    const [goals, setGoals] = useState<Goal[]>(INITIAL_GOALS);
+    const [transactions, setTransactions] = useLocalStorage<Transaction[]>('transactions', INITIAL_DATA);
+    const [goals, setGoals] = useLocalStorage<Goal[]>('goals', INITIAL_GOALS);
     const [activeTab, setActiveTab] = useState<'home' | 'goals' | 'stats' | 'settings'>('home');
     const [activePage, setActivePage] = useState<'main' | 'help' | 'privacy' | 'terms'>('main');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function App() {
     const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
 
     // SETTINGS STATE
-    const [settings, setSettings] = useState<SettingsState>({
+    const [settings, setSettings] = useLocalStorage<SettingsState>('settings', {
         profile: {
             name: 'Buğra G.',
             email: 'Bugra@example.com',
