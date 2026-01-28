@@ -1,12 +1,12 @@
 {
-  "name": "hesapp-im",
+  "name": "gider-im",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "homepage": "https://AdemBugraGevenc.github.io/gider-im",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "pnpm exec tsc && vite build",
     "preview": "vite preview",
     "predeploy": "pnpm run build",
     "deploy": "gh-pages -d dist"

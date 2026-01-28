@@ -305,7 +305,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         Made by Buğra
                     </p>
                     <p className="text-[8px] text-slate-300 font-medium mt-1">
-                        © 2026 HesApp.im Projesi
+                        © 2026 Gider.im Projesi
                     </p>
                 </div>
             </div>
@@ -362,8 +362,8 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
                     <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-3">İletişim</h3>
                     <div className="space-y-2 text-[10px] text-slate-600">
-                        <p><span className="font-bold">E-posta:</span> destek@hesapp.im</p>
-                        <p><span className="font-bold">Web:</span> www.hesapp.im</p>
+                        <p><span className="font-bold">E-posta:</span> destek@Gider.im</p>
+                        <p><span className="font-bold">Web:</span> www.Gider.im</p>
                         <p className="text-[9px] text-slate-400 mt-3">Sorularınız için 7/24 destek ekibimize ulaşabilirsiniz.</p>
                     </div>
                 </div>
@@ -396,7 +396,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">1. Veri Toplama</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp, finansal işlemlerinizi ve hedeflerinizi yalnızca cihazınızda saklar.
+                            Gider, finansal işlemlerinizi ve hedeflerinizi yalnızca cihazınızda saklar.
                             Hiçbir kişisel veya finansal bilginiz sunucularımıza gönderilmez.
                         </p>
                     </div>
@@ -457,7 +457,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">1. Hizmet Kullanımı</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp'i kullanarak bu kullanım koşullarını kabul etmiş olursunuz.
+                            Gider'i kullanarak bu kullanım koşullarını kabul etmiş olursunuz.
                             Uygulama kişisel finans yönetimi için tasarlanmıştır.
                         </p>
                     </div>
@@ -477,7 +477,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">4. Sorumluluk Reddi</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp "olduğu gibi" sunulmaktadır. Finansal kararlarınızdan doğacak sonuçlardan sorumlu değiliz.
+                            Gider "olduğu gibi" sunulmaktadır. Finansal kararlarınızdan doğacak sonuçlardan sorumlu değiliz.
                             Profesyonel finansal danışmanlık için uzmanlarla görüşmenizi öneririz.
                         </p>
                     </div>
@@ -491,7 +491,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">6. İletişim</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            Kullanım koşulları hakkında sorularınız için destek@hesapp.im adresinden bize ulaşabilirsiniz.
+                            Kullanım koşulları hakkında sorularınız için destek@Gider.im adresinden bize ulaşabilirsiniz.
                         </p>
                     </div>
                 </div>
