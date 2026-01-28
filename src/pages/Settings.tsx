@@ -7,13 +7,15 @@ interface SettingsProps {
     setSettings: (settings: SettingsState) => void;
     activePage: 'main' | 'help' | 'privacy' | 'terms';
     setActivePage: (page: 'main' | 'help' | 'privacy' | 'terms') => void;
+    onLogout: () => void;
 }
 
 export const Settings: React.FC<SettingsProps> = ({
     settings,
     setSettings,
     activePage,
-    setActivePage
+    setActivePage,
+    onLogout
 }) => {
     if (activePage === 'main') {
         return (
@@ -96,24 +98,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     </div>
                     <div className="divide-y divide-slate-100">
 
-                        {/* Email Notifications */}
-                        <div className="px-4 py-3.5 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-                                    <span className="text-sm">📧</span>
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold text-slate-900">E-posta Bildirimleri</p>
-                                    <p className="text-[9px] text-slate-400 font-medium">Haftalık özet</p>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => setSettings({ ...settings, notifications: { ...settings.notifications, email: !settings.notifications.email } })}
-                                className={`w-12 h-6 rounded-full transition-colors relative ${settings.notifications.email ? 'bg-emerald-500' : 'bg-slate-200'}`}
-                            >
-                                <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${settings.notifications.email ? 'left-[26px]' : 'left-0.5'}`}></div>
-                            </button>
-                        </div>
+
 
                         {/* Budget Alerts */}
                         <div className="px-4 py-3.5 flex items-center justify-between">
@@ -295,7 +280,10 @@ export const Settings: React.FC<SettingsProps> = ({
                 </div>
 
                 {/* Logout Button */}
-                <button className="w-full py-4 bg-rose-50 text-rose-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rose-100 transition-colors shadow-sm border border-rose-100">
+                <button
+                    onClick={onLogout}
+                    className="w-full py-4 bg-rose-50 text-rose-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rose-100 transition-colors shadow-sm border border-rose-100"
+                >
                     Çıkış Yap
                 </button>
 
@@ -305,7 +293,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         Made by Buğra
                     </p>
                     <p className="text-[8px] text-slate-300 font-medium mt-1">
-                        © 2026 HesApp.im Projesi
+                        © 2026 Gider.im Projesi
                     </p>
                 </div>
             </div>
@@ -362,8 +350,8 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
                     <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-3">İletişim</h3>
                     <div className="space-y-2 text-[10px] text-slate-600">
-                        <p><span className="font-bold">E-posta:</span> destek@hesapp.im</p>
-                        <p><span className="font-bold">Web:</span> www.hesapp.im</p>
+                        <p><span className="font-bold">E-posta:</span> destek@gider.im</p>
+                        <p><span className="font-bold">Web:</span> www.gider.im</p>
                         <p className="text-[9px] text-slate-400 mt-3">Sorularınız için 7/24 destek ekibimize ulaşabilirsiniz.</p>
                     </div>
                 </div>
@@ -396,7 +384,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">1. Veri Toplama</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp, finansal işlemlerinizi ve hedeflerinizi yalnızca cihazınızda saklar.
+                            Gider.im, finansal işlemlerinizi ve hedeflerinizi yalnızca cihazınızda saklar.
                             Hiçbir kişisel veya finansal bilginiz sunucularımıza gönderilmez.
                         </p>
                     </div>
@@ -457,7 +445,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">1. Hizmet Kullanımı</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp'i kullanarak bu kullanım koşullarını kabul etmiş olursunuz.
+                            Gider.im'i kullanarak bu kullanım koşullarını kabul etmiş olursunuz.
                             Uygulama kişisel finans yönetimi için tasarlanmıştır.
                         </p>
                     </div>
@@ -477,7 +465,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">4. Sorumluluk Reddi</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            HesApp "olduğu gibi" sunulmaktadır. Finansal kararlarınızdan doğacak sonuçlardan sorumlu değiliz.
+                            Gider.im "olduğu gibi" sunulmaktadır. Finansal kararlarınızdan doğacak sonuçlardan sorumlu değiliz.
                             Profesyonel finansal danışmanlık için uzmanlarla görüşmenizi öneririz.
                         </p>
                     </div>
@@ -491,7 +479,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div>
                         <h3 className="text-xs font-black text-slate-900 mb-2">6. İletişim</h3>
                         <p className="text-[10px] text-slate-600 leading-relaxed">
-                            Kullanım koşulları hakkında sorularınız için destek@hesapp.im adresinden bize ulaşabilirsiniz.
+                            Kullanım koşulları hakkında sorularınız için destek@gider.im adresinden bize ulaşabilirsiniz.
                         </p>
                     </div>
                 </div>

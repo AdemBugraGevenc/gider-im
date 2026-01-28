@@ -1,4 +1,4 @@
-import { Transaction, Goal } from '../types';
+import { Transaction, Goal, Subscription, Budget } from '../types';
 
 /**
  * MOCK DATA
@@ -26,4 +26,41 @@ export const INITIAL_GOALS: Goal[] = [
     { id: 'goal2', title: 'Acil Fon', targetAmount: 50000, currentAmount: 32000, category: 'Tasarruf', deadline: '2026-12-31', icon: '🛡️', color: 'from-emerald-500 to-teal-600' },
     { id: 'goal3', title: 'Yeni Laptop', targetAmount: 45000, currentAmount: 12000, category: 'Teknoloji', deadline: '2026-04-15', icon: '💻', color: 'from-violet-500 to-purple-600' },
     { id: 'goal4', title: 'Araba Peşinatı', targetAmount: 100000, currentAmount: 25000, category: 'Ulaşım', deadline: '2026-09-01', icon: '🚗', color: 'from-orange-500 to-red-600' },
+];
+
+export const INITIAL_SUBSCRIPTIONS: Subscription[] = [
+    { id: 'sub1', title: 'Netflix', amount: 229, paymentDay: 5, category: 'Eğlence', icon: '🎬', isActive: true },
+    { id: 'sub2', title: 'Spotify', amount: 59, paymentDay: 12, category: 'Eğlence', icon: '🎵', isActive: true },
+    { id: 'sub3', title: 'Ev Kirası', amount: 15000, paymentDay: 1, category: 'Kira', icon: '🏠', isActive: true },
+    { id: 'sub4', title: 'Spor Salonu', amount: 1200, paymentDay: 15, category: 'Sağlık', icon: '💪', isActive: true },
+];
+
+export const INITIAL_BUDGETS: Budget[] = [
+    { id: 'bud1', category: 'Gıda', limitAmount: 5000, icon: '🛒', color: 'bg-orange-500' },
+    { id: 'bud2', category: 'Eğlence', limitAmount: 2000, icon: '🎉', color: 'bg-purple-500' },
+    { id: 'bud3', category: 'Kira', limitAmount: 16000, icon: '🏠', color: 'bg-rose-500' },
+    { id: 'bud4', category: 'Altyapı', limitAmount: 3000, icon: '📡', color: 'bg-blue-500' },
+];
+
+export const INITIAL_CREDIT_CARDS: import('../types').CreditCard[] = [
+    {
+        id: 'cc1',
+        name: 'Axess Platinum',
+        limit: 100000,
+        currentDebt: 12450.50,
+        cutoffDay: 10,
+        paymentDueDay: 20,
+        color: 'from-amber-600 to-yellow-600',
+        icon: '💳'
+    },
+    {
+        id: 'cc2',
+        name: 'Bonus Gold',
+        limit: 50000,
+        currentDebt: 3200.00,
+        cutoffDay: 1,
+        paymentDueDay: 10,
+        color: 'from-emerald-600 to-teal-600',
+        icon: '💳'
+    }
 ];

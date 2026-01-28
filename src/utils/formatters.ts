@@ -25,3 +25,8 @@ export const formatDateTitle = (dateStr: string) => {
 export const formatMonthYear = (date: Date) => {
     return date.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }).toUpperCase();
 };
+
+export const formatDateItem = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }).toUpperCase();
+};

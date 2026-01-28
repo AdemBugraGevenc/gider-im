@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react';
-import { ChevronLeft, ChevronRight, ArrowUpCircle, ArrowDownCircle, CalendarDays } from 'lucide-react';
-import { SummaryStats, Transaction } from '../types';
+import { ChevronLeft, ChevronRight, ArrowUpCircle, ArrowDownCircle, CalendarDays, FileDown, FileSpreadsheet } from 'lucide-react';
+import { SummaryStats, Transaction, Budget } from '../types';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface AnalizProps {
     stats: SummaryStats;
     monthlyTransactions: Transaction[];
+    budgets?: Budget[];
     currentDate: Date;
     changeMonth: (direction: 'prev' | 'next') => void;
     formatCurrency: (amount: number) => string;
@@ -14,6 +17,7 @@ interface AnalizProps {
 export const Analiz: React.FC<AnalizProps> = ({
     stats,
     monthlyTransactions,
+    budgets = [],
     currentDate,
     changeMonth,
     formatCurrency,
@@ -47,25 +51,124 @@ export const Analiz: React.FC<AnalizProps> = ({
             .sort((a, b) => b.total - a.total);
     }, [monthlyTransactions]);
 
+    const exportToPDF = () => {
+        const doc = new jsPDF();
+
+        // Set font to support Turkish characters better
+        doc.setFont('helvetica');
+
+        doc.setFontSize(18);
+        doc.text(`Finansal Rapor - ${formatMonthYear(currentDate)}`, 14, 20);
+
+        doc.setFontSize(11);
+        doc.setTextColor(100);
+        doc.text(`Olusturulma Tarihi: ${new Date().toLocaleDateString('tr-TR')}`, 14, 28);
+
+        // Summary Table
+        autoTable(doc, {
+            startY: 35,
+            head: [['Ozet', 'Tutar']],
+            body: [
+                ['Toplam Gelir', formatCurrency(stats.monthlyIncome)],
+                ['Toplam Gider', formatCurrency(stats.monthlyExpense)],
+                ['Net Durum', formatCurrency(stats.monthlyIncome - stats.monthlyExpense)],
+            ],
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: {
+                font: 'helvetica',
+                fontStyle: 'normal'
+            }
+        });
+
+        // Transactions Table
+        const tableData = monthlyTransactions.map(t => [
+            new Date(t.date).toLocaleDateString('tr-TR'),
+            t.title,
+            t.category,
+            t.type === 'income' ? 'Gelir' : 'Gider',
+            formatCurrency(t.amount),
+            t.status === 'completed' ? 'Tamamlandi' : 'Bekliyor'
+        ]);
+
+        autoTable(doc, {
+            startY: (doc as any).lastAutoTable.finalY + 15,
+            head: [['Tarih', 'Aciklama', 'Kategori', 'Tur', 'Tutar', 'Durum']],
+            body: tableData,
+            theme: 'striped',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: {
+                font: 'helvetica',
+                fontStyle: 'normal'
+            }
+        });
+
+        doc.save(`Rapor-${formatMonthYear(currentDate)}.pdf`);
+    };
+
+    const exportToExcel = () => {
+        // Simple CSV export
+        const headers = ["Tarih", "Açıklama", "Kategori", "Tür", "Tutar", "Durum"];
+        const rows = monthlyTransactions.map(t => [
+            new Date(t.date).toLocaleDateString('tr-TR'),
+            `"${t.title.replace(/"/g, '""')}"`, // Escape quotes
+            t.category,
+            t.type === 'income' ? 'Gelir' : 'Gider',
+            t.amount,
+            t.status === 'completed' ? 'Tamamlandı' : 'Bekliyor'
+        ]);
+
+        const csvContent = "data:text/csv;charset=utf-8,\uFEFF"
+            + headers.join(",") + "\n"
+            + rows.map(e => e.join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Rapor-${formatMonthYear(currentDate)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="p-4 space-y-6">
-            {/* Month Navigation */}
-            <div className="flex items-center justify-between bg-white p-1 rounded-xl shadow-sm border border-slate-100">
-                <button
-                    onClick={() => changeMonth('prev')}
-                    className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
-                >
-                    <ChevronLeft className="w-5 h-5" />
-                </button>
-                <span className="text-xs font-black text-slate-800 tracking-widest min-w-[100px] text-center">
-                    {formatMonthYear(currentDate)}
-                </span>
-                <button
-                    onClick={() => changeMonth('next')}
-                    className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
-                >
-                    <ChevronRight className="w-5 h-5" />
-                </button>
+            {/* Month Navigation & Export */}
+            <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between bg-white p-1 rounded-xl shadow-sm border border-slate-100">
+                    <button
+                        onClick={() => changeMonth('prev')}
+                        className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <span className="text-xs font-black text-slate-800 tracking-widest min-w-[100px] text-center">
+                        {formatMonthYear(currentDate)}
+                    </span>
+                    <button
+                        onClick={() => changeMonth('next')}
+                        className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                    >
+                        <ChevronRight className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                    <button
+                        onClick={exportToPDF}
+                        className="flex items-center justify-center gap-2 py-3 bg-slate-800 text-white rounded-xl shadow-lg active:scale-95 transition-all outline-none group"
+                    >
+                        <FileDown className="w-4 h-4 group-hover:animate-bounce" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">PDF İndir</span>
+                    </button>
+                    <button
+                        onClick={exportToExcel}
+                        className="flex items-center justify-center gap-2 py-3 bg-emerald-600 text-white rounded-xl shadow-lg active:scale-95 transition-all outline-none group"
+                    >
+                        <FileSpreadsheet className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Excel'e At</span>
+                    </button>
+                </div>
             </div>
 
             {/* Summary Cards */}
@@ -91,6 +194,62 @@ export const Analiz: React.FC<AnalizProps> = ({
                     </div>
                 </div>
             </div>
+
+            {/* BUDGET LIMITS */}
+            {budgets.length > 0 && (
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Bütçe Limitleri</h3>
+                        <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-full">Bu Ay</span>
+                    </div>
+
+                    <div className="space-y-4">
+                        {budgets.map(budget => {
+                            // Calculate current expense for this budget category
+                            const currentExpense = monthlyTransactions
+                                .filter(t => t.type === 'expense' && t.category === budget.category)
+                                .reduce((acc, t) => acc + t.amount, 0);
+
+                            const percentage = Math.min((currentExpense / budget.limitAmount) * 100, 100);
+                            const isOverBudget = currentExpense > budget.limitAmount;
+
+                            // Determine color based on percentage
+                            let progressColor = 'bg-emerald-500';
+                            if (percentage > 80) progressColor = 'bg-rose-500';
+                            else if (percentage > 50) progressColor = 'bg-amber-500';
+
+                            return (
+                                <div key={budget.id} className="space-y-1.5">
+                                    <div className="flex items-center justify-between text-[10px]">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-base">{budget.icon}</span>
+                                            <span className="font-bold text-slate-700">{budget.category}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1 font-bold">
+                                            <span className={isOverBudget ? 'text-rose-600' : 'text-slate-900'}>
+                                                {formatCurrency(currentExpense)}
+                                            </span>
+                                            <span className="text-slate-300">/</span>
+                                            <span className="text-slate-400">{formatCurrency(budget.limitAmount)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div
+                                            className={`h-full rounded-full transition-all duration-500 ${progressColor} ${isOverBudget ? 'animate-pulse' : ''}`}
+                                            style={{ width: `${percentage}%` }}
+                                        />
+                                    </div>
+                                    {isOverBudget && (
+                                        <p className="text-[8px] font-black text-rose-500 uppercase tracking-wide text-right">
+                                            LİMİT AŞILDI!
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
 
             {/* Net Balance */}
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
